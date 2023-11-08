@@ -76,15 +76,15 @@ func (d *dynamoDBSatelliteRepository) GetSatellites(requestID string) (*entities
 			tableName: {
 				Keys: []map[string]*dynamodb.AttributeValue{
 					{
-						"Name": &dynamodb.AttributeValue{
+						"name": &dynamodb.AttributeValue{
 							S: aws.String(sato),
 						},
 					}, {
-						"Name": &dynamodb.AttributeValue{
+						"name": &dynamodb.AttributeValue{
 							S: aws.String(skywalker),
 						},
 					}, {
-						"Name": &dynamodb.AttributeValue{
+						"name": &dynamodb.AttributeValue{
 							S: aws.String(kenobi),
 						},
 					},
