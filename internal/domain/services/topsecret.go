@@ -3,12 +3,13 @@ package services
 import (
 	"encoding/json"
 	"fmt"
+	"os"
 
 	"github.com/unawaretub86/top-secret-split/internal/domain/entities"
 	"github.com/unawaretub86/top-secret-split/internal/domain/ports"
 )
 
-var pathParameterName = "satellite-name"
+var pathParameterName = os.Getenv("PATH_PARAM")
 
 type topSecretService struct {
 	repository ports.RepositoryPort
