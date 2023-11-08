@@ -53,7 +53,7 @@ func (service *topSecretService) GetPositionMessage(requestId string) (*entities
 	}
 
 	// validamos que sean 3 los satellites para poder obtener locationMessage
-	err = satellites.ValidateSatellites()
+	err = satellites.Validate()
 	if err != nil {
 		fmt.Printf("[RequestId: %s][Error: %v]", requestId, err)
 		return nil, err

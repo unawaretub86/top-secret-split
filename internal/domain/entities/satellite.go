@@ -30,8 +30,8 @@ func (satellite *Satellite) ValidateSatellite() error {
 }
 
 // Validate se encarga de validar que el numero de satellites sea correcto
-func (satellites *Satellites) ValidateSatellites() error {
-	if len(satellites.Satellite) == 0 || satellites.Satellite == nil {
+func (satellites *Satellites) Validate() error {
+	if len(satellites.Satellite) < 3 {
 		return errors.ErrNotEnoughSatellites
 	}
 
