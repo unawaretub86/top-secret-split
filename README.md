@@ -21,8 +21,13 @@ Go rest para obtener la ubicación de una nave y el mensaje que esta emite
 <!-- ABOUT THE PROJECT -->
 ## Sobre el proyecto
 
-Proyecto desarrollado para la prueba tecnica Fuego de Quasar
-En la cual en el siguiente servicio vamos a encontrar una lambda serverless desarrollada con GOLANG  y una arquitectura hexagonal, la cual nos ayudara a obtener la posicion de el satelite y el mensaje que debemos calcular, esto una vez se hayan recibido los satellites necesarios para llevar a cabo este calculo.
+Este proyecto ha sido desarrollado en el contexto de la prueba técnica Fuego de Quasar. En esta prueba, se presenta un servicio FaaS (Function as a Service) que utiliza una función Lambda serverless implementada en Golang. Esta función se encarga de guardar la información de los satélites en una base de datos DynamoDB y se comunica mediante HTTP con el servicio topsecret.
+
+El propósito de este servicio es almacenar la información de los satélites que sean enviados a través de HTTP. Una vez se haya recibido la cantidad necesaria de satélites para llevar a cabo el cálculo, se podrá utilizar el método GET para comunicarse con el servicio topsecret. Esto permite reutilizar la funcionalidad del servicio topsecret para calcular la posición y descifrar el mensaje de manera efectiva.
+
+Este servicio utiliza una arquitectura hexagonal diseñada para preservar la integridad de la lógica de negocio y permitir la incorporación de nuevas implementaciones a través de adaptadores, sin necesidad de modificar la lógica existente. Esta estructura proporciona flexibilidad para extender y adaptar el servicio a futuras necesidades, garantizando la coherencia de la aplicación.
+
+En este servicio, hemos incorporado flujos de trabajo de GitHub Actions para asegurar la alta calidad de integración de Git Flow a través de pull requests. Estos flujos de trabajo incluyen acciones como construcción (build), cobertura (coverage) y verificación de código (lint). Esta implementación garantiza una integración fluida y una revisión exhaustiva del código, lo que nos permite mantener altos estándares de calidad en nuestro proyecto.
 
 <p align="right">(<a href="#readme-top">Volver al inicio</a>)</p>
 
@@ -39,9 +44,8 @@ En la cual en el siguiente servicio vamos a encontrar una lambda serverless desa
 <!-- USAGE EXAMPLES -->
 ## Usage
 
-Use this space to show useful examples of how a project can be used. Additional screenshots, code examples and demos work well in this space. You may also link to more resources.
-
-_For more examples, please refer to the [Documentation](https://example.com)_
+* [Top Secret split POST](docs/topsecretsplitPost.md) : `POST /topsecret_split/{satellite_name}`
+* [Top Secret split GET](docs/topsecretsplitGet.md) : `GET /topsecret_split`
 
 <p align="right">(<a href="#readme-top">Volver al inicio</a>)</p>
 

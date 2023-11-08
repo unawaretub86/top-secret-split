@@ -22,7 +22,7 @@ type (
 
 // Validate se encarga de validar que los parametros sean correctos
 func (satellite *Satellite) ValidateSatellite() error {
-	if satellite.Name == "" || satellite.Distance == nil || len(satellite.Message) == 0 {
+	if satellite.Distance == nil || len(satellite.Message) == 0 {
 		return errors.ErrInvalidSatellite
 	}
 
