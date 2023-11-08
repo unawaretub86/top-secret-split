@@ -1,12 +1,11 @@
 package services
 
 import (
+	"encoding/json"
 	"fmt"
 
-	"github.com/unawaretub86/top-secret-split/internal/config/errors"
 	"github.com/unawaretub86/top-secret-split/internal/domain/entities"
 	"github.com/unawaretub86/top-secret-split/internal/domain/ports"
-	"github.com/unawaretub86/top-secret-split/internal/domain/request"
 )
 
 var pathParameterName = "satellite-name"
@@ -27,10 +26,9 @@ func NewTopSecretService(repository ports.RepositoryPort, rest ports.RepositoryR
 func (service *topSecretService) TopSecretSplit(pathParameters map[string]string, body, requestId string) (*entities.Satellite, error) {
 	satellite := &entities.Satellite{}
 
-	err := request.ConvertToStruct(satellite, body, requestId)
+	err := json.Unmarshal([]byte(body), &satellite)
 	if err != nil {
-		fmt.Printf("[RequestId: %s][Error: %v]", requestId, errors.ErrInvalidSatellite)
-		return nil, err
+		return nil, fmt.Errorf("[RequestId: %s][Error Unmarshaling API Gateway request: %v]", requestId, err)
 	}
 
 	// obtenemos path param para guardar el satellite por nombre
@@ -60,12 +58,5 @@ func (service *topSecretService) GetPositionMessage(requestId string) (*entities
 		return nil, err
 	}
 
-	locationMessage := &entities.LocationMessage{}
-	err = request.ConvertToStruct(locationMessage, string(result), requestId)
-	if err != nil {
-		fmt.Printf("[RequestId: %s][Error: %v]", requestId, err)
-		return nil, err
-	}
-
-	return locationMessage, nil
+	return result, nil
 }

@@ -2,6 +2,7 @@ package http
 
 import (
 	"bytes"
+	"encoding/json"
 	"fmt"
 	"io"
 	"net/http"
@@ -28,7 +29,7 @@ func NewRestHttp() *RestHttp {
 }
 
 // Se encarga de hacer una peticion POST a la lambda top-secret con los satellites previamente almacenados
-func (r *RestHttp) GetLocationMessage(satellites entities.Satellites, requestId string) ([]byte, error) {
+func (r *RestHttp) GetLocationMessage(satellites entities.Satellites, requestId string) (*entities.LocationMessage, error) {
 	// convertimos a bytes para poder realizar la peticion
 	payload, err := request.ConvertToBytes(satellites, requestId)
 	if err != nil {
@@ -52,5 +53,11 @@ func (r *RestHttp) GetLocationMessage(satellites entities.Satellites, requestId 
 		return nil, err
 	}
 
-	return bytes, nil
+	locationMessage := &entities.LocationMessage{}
+	err = json.Unmarshal(bytes, &locationMessage)
+	if err != nil {
+		return nil, fmt.Errorf("[RequestId: %s][Error Unmarshaling API Gateway request: %v]", requestId, err)
+	}
+
+	return locationMessage, nil
 }
