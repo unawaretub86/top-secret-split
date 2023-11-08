@@ -2,6 +2,7 @@ package repositories
 
 import (
 	"fmt"
+	"os"
 
 	"github.com/aws/aws-sdk-go/aws"
 	"github.com/aws/aws-sdk-go/aws/session"
@@ -14,7 +15,7 @@ import (
 	"github.com/unawaretub86/top-secret-split/internal/domain/request"
 )
 
-const tableName = "satellites"
+var tableName = os.Getenv("TABLE_NAME")
 
 type dynamoDBSatelliteRepository struct {
 	dynamodb dynamodbiface.DynamoDBAPI
@@ -76,15 +77,15 @@ func (d *dynamoDBSatelliteRepository) GetSatellites(requestID string) (*entities
 			tableName: {
 				Keys: []map[string]*dynamodb.AttributeValue{
 					{
-						"name": &dynamodb.AttributeValue{
+						"Name": &dynamodb.AttributeValue{
 							S: aws.String(sato),
 						},
 					}, {
-						"name": &dynamodb.AttributeValue{
+						"Name": &dynamodb.AttributeValue{
 							S: aws.String(skywalker),
 						},
 					}, {
-						"name": &dynamodb.AttributeValue{
+						"Name": &dynamodb.AttributeValue{
 							S: aws.String(kenobi),
 						},
 					},
