@@ -1,6 +1,7 @@
 package test
 
 import (
+	"errors"
 	"testing"
 
 	"github.com/golang/mock/gomock"
@@ -89,4 +90,23 @@ func TestTopSecretOk(t *testing.T) {
 		Distance: &d1,
 		Message:  []string{"message1"},
 	})
+}
+
+func TestTopSecretERR(t *testing.T) {
+	m := mocks{
+		topSecret: mocks_test.NewMockTopSecretPort(gomock.NewController(t)),
+		repoDB:    mocks_test.NewMockRepositoryPort(gomock.NewController(t)),
+		repoRest:  mocks_test.NewMockHttpPort(gomock.NewController(t)),
+	}
+
+	requestID := "test123"
+
+	topService := services.NewTopSecretService(m.repoDB, m.repoRest)
+
+	responseTopSecretSplit, err2 := topService.TopSecretSplit(nil, "", requestID)
+
+	err := errors.New("[RequestId: test123][Error: Satellites are not enough]")
+
+	assert.Nil(t, responseTopSecretSplit)
+	assert.Equal(t, err2, err)
 }
