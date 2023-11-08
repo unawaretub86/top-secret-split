@@ -4,6 +4,7 @@ import (
 	"reflect"
 
 	"github.com/golang/mock/gomock"
+
 	"github.com/unawaretub86/top-secret-split/internal/domain/entities"
 )
 

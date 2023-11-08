@@ -37,14 +37,17 @@ func TestTopSecretOk(t *testing.T) {
 	satellites := entities.Satellites{
 		Satellite: []entities.Satellite{
 			{
+				Name:     "kenobi",
 				Distance: &d1,
 				Message:  []string{"este", "", "", "mensaje", ""},
 			},
 			{
+				Name:     "skywalker",
 				Distance: &d2,
 				Message:  []string{"", "es", "", "", "secreto"},
 			},
 			{
+				Name:     "sato",
 				Distance: &d3,
 				Message:  []string{"este", "", "un", "", ""},
 			},
@@ -52,7 +55,6 @@ func TestTopSecretOk(t *testing.T) {
 	}
 
 	satellite := entities.Satellite{
-		Name:     "kenobi",
 		Distance: &d1,
 		Message:  []string{"message1"},
 	}
@@ -65,15 +67,9 @@ func TestTopSecretOk(t *testing.T) {
 
 	body := `{"distance": 600.0, "message": ["message1"]}`
 
-	expectedSatellite := entities.Satellite{
-		Name:     "kenobi",
-		Distance: &d1,
-		Message:  []string{"message1"},
-	}
-
 	pathParameters := map[string]string{"satellite-name": "kenobi"}
 
-	m.repoDB.EXPECT().CreateSatellite(requestID, &satellite).Return(&expectedSatellite, nil)
+	m.repoDB.EXPECT().CreateSatellite(requestID, &satellite).Return(&satellite, nil)
 	m.repoDB.EXPECT().GetSatellites(requestID).Return(&satellites, nil)
 
 	m.repoRest.EXPECT().GetLocationMessage(satellites, requestID).Return(locationMessage, nil)
@@ -89,5 +85,8 @@ func TestTopSecretOk(t *testing.T) {
 		Message: "este es un mensaje secreto",
 	})
 
-	assert.Equal(t, responseTopSecretSplit, &expectedSatellite)
+	assert.Equal(t, responseTopSecretSplit, &entities.Satellite{
+		Distance: &d1,
+		Message:  []string{"message1"},
+	})
 }

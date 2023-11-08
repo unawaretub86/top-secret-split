@@ -10,12 +10,15 @@ import (
 	"github.com/aws/aws-sdk-go/service/dynamodb/dynamodbattribute"
 	"github.com/aws/aws-sdk-go/service/dynamodb/dynamodbiface"
 
-	"github.com/unawaretub86/top-secret-split/internal/config/errors"
 	"github.com/unawaretub86/top-secret-split/internal/domain/entities"
 	"github.com/unawaretub86/top-secret-split/internal/domain/request"
 )
 
 var tableName = os.Getenv("TABLE_NAME")
+
+type KeyItem struct {
+	Name string
+}
 
 type dynamoDBSatelliteRepository struct {
 	dynamodb dynamodbiface.DynamoDBAPI
@@ -71,27 +74,29 @@ func (d *dynamoDBSatelliteRepository) GetSatellites(requestID string) (*entities
 	skywalker := "Skywalker"
 	kenobi := "Kenobi"
 
-	// construimos input para realizar un batch y traer los 3 satellites necesarios
+	// Creamos una lista de estructuras KeyItem para mantener el orden de las claves
+	keys := []KeyItem{
+		{Name: kenobi},
+		{Name: skywalker},
+		{Name: sato},
+	}
+
+	// Creamos un objeto BatchGetItemInput
 	input := &dynamodb.BatchGetItemInput{
 		RequestItems: map[string]*dynamodb.KeysAndAttributes{
 			tableName: {
-				Keys: []map[string]*dynamodb.AttributeValue{
-					{
-						"Name": &dynamodb.AttributeValue{
-							S: aws.String(sato),
-						},
-					}, {
-						"Name": &dynamodb.AttributeValue{
-							S: aws.String(skywalker),
-						},
-					}, {
-						"Name": &dynamodb.AttributeValue{
-							S: aws.String(kenobi),
-						},
-					},
-				},
+				Keys: make([]map[string]*dynamodb.AttributeValue, len(keys)),
 			},
 		},
+	}
+
+	// Recorremos la lista de claves y las agregamos a la entrada BatchGetItemInput
+	for i, key := range keys {
+		input.RequestItems[tableName].Keys[i] = map[string]*dynamodb.AttributeValue{
+			"name": {
+				S: aws.String(key.Name),
+			},
+		}
 	}
 
 	// realizamos batch para obtener la informacion de los satellites
@@ -101,10 +106,5 @@ func (d *dynamoDBSatelliteRepository) GetSatellites(requestID string) (*entities
 		return nil, err
 	}
 
-	if len(output.Responses[tableName]) < 3 {
-		fmt.Printf("[RequestId: %s][Error: %v]", requestID, errors.ErrNotEnoughSatellites)
-		return nil, err
-	}
-
-	return request.ItemsToSatellites(requestID, output)
+	return request.ItemsToSatellites(requestID, tableName, output)
 }
