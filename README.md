@@ -30,6 +30,7 @@ En la cual en el siguiente servicio vamos a encontrar una lambda serverless desa
 
 * [![Go][Go.dev]][Go-url]
 * [![Aws][aws.com]][Aws-url]
+* [![Dynamo][dynamo.com]][Dynamo-url]
 * [![Github][github.com]][Github-url]
 * [![Github Actions][github-actions.com]][GithubActions-url]
 
@@ -61,6 +62,8 @@ Project Link: [Github repo](https://github.com/unawaretub86/top-secret)
 [Go-url]: https://go.dev/
 [aws.com]: https://img.shields.io/badge/AWS-%23FF9900.svg?style=for-the-badge&logo=amazon-aws&logoColor=white
 [Aws-url]: https://aws.amazon.com/es/
+[dynamo.com]: https://img.shields.io/badge/Amazon%20DynamoDB-4053D6?style=for-the-badge&logo=Amazon%20DynamoDB&logoColor=white
+[Dynamo-url]: https://aws.amazon.com/es/
 [github.com]: https://img.shields.io/badge/github-%23121011.svg?style=for-the-badge&logo=github&logoColor=white
 [Github-url]: https://github.com/
 [github-actions.com]: https://img.shields.io/badge/github%20actions-%232671E5.svg?style=for-the-badge&logo=githubactions&logoColor=white
