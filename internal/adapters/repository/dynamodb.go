@@ -60,7 +60,8 @@ func (d *dynamoDBSatelliteRepository) CreateSatellite(requestID string, satellit
 		fmt.Printf("[RequestId: %s][Error: %v]", requestID, err)
 		return nil, err
 	}
-	return satelliteData, nil
+
+	return satellite, nil
 }
 
 // obtenemos los satellites previamente guardados en DB
