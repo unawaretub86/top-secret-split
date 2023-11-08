@@ -8,6 +8,7 @@ import (
 	"net/http"
 	"os"
 
+	"github.com/unawaretub86/top-secret-split/internal/config/errors"
 	"github.com/unawaretub86/top-secret-split/internal/domain/entities"
 	"github.com/unawaretub86/top-secret-split/internal/domain/request"
 )
@@ -33,7 +34,7 @@ func (r *RestHttp) GetLocationMessage(satellites entities.Satellites, requestId 
 	// convertimos a bytes para poder realizar la peticion
 	payload, err := request.ConvertToBytes(satellites, requestId)
 	if err != nil {
-		fmt.Printf("[RequestId: %s][Error marshaling API Gateway request: %v]", requestId, err)
+		fmt.Printf("[RequestId: %s][Error: %v]", requestId, errors.ErrNotEnoughSatellites)
 		return nil, err
 	}
 
@@ -49,14 +50,14 @@ func (r *RestHttp) GetLocationMessage(satellites entities.Satellites, requestId 
 	// leemos la respuesta para poder retornarla de tipo []byte
 	bytes, err := io.ReadAll(resp.Body)
 	if err != nil {
-		fmt.Printf("[RequestId: %s], [Error: %v]", requestId, err)
+		fmt.Printf("[RequestId: %s], [Error: %v]", requestId, errors.ErrNotEnoughSatellites)
 		return nil, err
 	}
 
 	locationMessage := &entities.LocationMessage{}
 	err = json.Unmarshal(bytes, &locationMessage)
 	if err != nil {
-		return nil, fmt.Errorf("[RequestId: %s][Error Unmarshaling API Gateway request: %v]", requestId, err)
+		return nil, fmt.Errorf("[RequestId: %s][Error: %v]", requestId, errors.ErrNotEnoughSatellites)
 	}
 
 	return locationMessage, nil

@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"os"
 
+	"github.com/unawaretub86/top-secret-split/internal/config/errors"
 	"github.com/unawaretub86/top-secret-split/internal/domain/entities"
 	"github.com/unawaretub86/top-secret-split/internal/domain/ports"
 )
@@ -29,7 +30,7 @@ func (service *topSecretService) TopSecretSplit(pathParameters map[string]string
 
 	err := json.Unmarshal([]byte(body), &satellite)
 	if err != nil {
-		return nil, fmt.Errorf("[RequestId: %s][Error Unmarshaling API Gateway request: %v]", requestId, err)
+		return nil, fmt.Errorf("[RequestId: %s][Error: %v]", requestId, errors.ErrNotEnoughSatellites)
 	}
 
 	// obtenemos path param para guardar el satellite por nombre
@@ -56,7 +57,7 @@ func (service *topSecretService) GetPositionMessage(requestId string) (*entities
 	// obtenemos locationMessage desde top-secret
 	result, err := service.rest.GetLocationMessage(*satellites, requestId)
 	if err != nil {
-		fmt.Printf("[RequestId: %s][Error: %v]", requestId, err)
+		fmt.Printf("[RequestId: %s][Error: %v]", requestId, errors.ErrNotEnoughSatellites)
 		return nil, err
 	}
 
