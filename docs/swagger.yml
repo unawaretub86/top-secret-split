@@ -1,0 +1,91 @@
+openapi: 3.0.0
+info:
+  title: top secret split
+  description: API for Save satellites and Get it from DB to get location message.
+  version: 1.0.0
+servers:
+  - url: https://dmzfktok87.execute-api.us-east-2.amazonaws.com/v1
+paths:
+  /top-secret-split/{satellite-name}:
+    post:
+      summary: Saves satellite in dynamoDB
+      description: returns the satellite saved
+       consumes:
+        - application/json
+      produces:
+        - application/json
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/Top-secret-split"
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Satellite'
+        '404':
+          description: not found
+          content: {}
+  /top-secret-split/:
+    get:
+      summary: Gets satellites from dynamoDB
+      parameters:
+        - in: path
+          name: satellite-name
+          required: true
+          schema:
+            type: string
+      description: returns the location message after consumes top-secret
+       consumes:
+        - application/json
+      produces:
+        - application/json
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/LocationMessage'
+        '404':
+          description: not found
+          content: {}
+
+
+components:
+  schemas:
+    Top-secret-split:
+      type: object
+      required:
+        - distance
+        - message
+      properties:
+        distance:
+          type: float
+          format: float32
+          description: Distance of the satellite
+        message:
+          type: message
+          description: Message of the satellite
+    LocationMessage:
+      type: object
+      required:
+        - X
+        - Y
+        - Message
+      properties:
+        x:
+          type: float
+          format: float32
+          description: Position x
+        y:
+          type: float
+          format: float32
+          description: Position Y
+        message:
+          type: message
+          description: message of the satellites concated
