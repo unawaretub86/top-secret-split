@@ -34,7 +34,11 @@ func (service *topSecretService) TopSecretSplit(pathParameters map[string]string
 	// obtenemos path param para guardar el satellite por nombre
 	satellite.Name = pathParameters[pathParameterName]
 
-	satellite.ValidateSatellite()
+	err = satellite.ValidateSatellite()
+	if err != nil {
+		fmt.Printf("[RequestId: %s][Error: %v]", requestId, err)
+		return nil, err
+	}
 
 	return service.repository.CreateSatellite(requestId, satellite)
 }
@@ -49,7 +53,11 @@ func (service *topSecretService) GetPositionMessage(requestId string) (*entities
 	}
 
 	// validamos que sean 3 los satellites para poder obtener locationMessage
-	satellites.ValidateSatellites()
+	err = satellites.ValidateSatellites()
+	if err != nil {
+		fmt.Printf("[RequestId: %s][Error: %v]", requestId, err)
+		return nil, err
+	}
 
 	// obtenemos locationMessage desde top-secret
 	result, err := service.rest.GetLocationMessage(*satellites, requestId)
